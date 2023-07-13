@@ -41,6 +41,12 @@ export default new Vuex.Store({
 
       // calculate total price of all items in the cart
       return getters.cartProducts.reduce((total, product) => total + product.price * product.quantity, 0)
+    },
+
+    productIsInStock (state) {
+      return (product) => {
+        return product.inventory > 0
+      }
     }
   },
 
@@ -71,21 +77,21 @@ export default new Vuex.Store({
       })
     },
 
-    addProductToCart (context, product) {
-      if (product.inventory > 0) {
+    addProductToCart ({state, getters, commit}, product) {
+      if (getters.productIsInStock(product)) {
         // checks if product already exists inside cart
-        const cartItem = context.state.cart.find(item => item.id === product.id)
+        const cartItem = state.cart.find(item => item.id === product.id)
         // find cartItem
         if (!cartItem) {
           // pushProductToCart
-          context.commit('pushProductToCart', product.id)
+          commit('pushProductToCart', product.id)
         } else {
           // incrementItemQuantity
-          context.commit('incrementCartItemQuantity', cartItem)
+          commit('incrementCartItemQuantity', cartItem)
         }
 
         // decrease item quantity from products
-        context.commit('decrementProductInventory', product)
+        commit('decrementProductInventory', product)
       }
     },
 
