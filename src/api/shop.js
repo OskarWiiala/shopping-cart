@@ -10,7 +10,7 @@ const _products = [
 
 export default {
   async getProducts () {
-    await wait(100)
+    await wait(800)
     return _products
   },
 

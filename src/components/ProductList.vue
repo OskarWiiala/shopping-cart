@@ -1,16 +1,23 @@
 <template>
   <div>
     <h1>Product List</h1>
-    <ul>
+    <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif"/>
+    <ul v-else>
       <li v-for="product in products" :key="product.key">{{ product.title }} - {{ product.price }}</li>
     </ul>
   </div>
 </template>
 
 <script>
-  import shop from '@/api/shop'
   import store from '@/store/index'
+
   export default {
+    data () {
+      return {
+        loading: false
+      }
+    },
+
     computed: {
       products () {
         return store.getters.availableProducts
@@ -19,13 +26,14 @@
     },
     // Will run right after the instance is created
     async created () {
-      const fetchedProducts = await shop.getProducts()
-
-      // Whenever the state is changed (through a mutation, of course) commit() is called
-      // First is the name of the mutation (must match!), then the payload
-      store.commit('setProducts', fetchedProducts)
-      // DO NOT do like this:
-      // store.state.products = products
+      this.loading = true
+      // dispatch will call store action method
+      // The first argument is the name of the action, the second is opitional, which is the payload
+      // .then comes from the promise in the action method
+      store.dispatch('fetchProducts').then((message) => {
+        console.log(message);
+        this.loading = false
+      })
     }
   }
 </script>
