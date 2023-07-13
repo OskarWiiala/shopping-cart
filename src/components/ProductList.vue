@@ -17,7 +17,7 @@
     data () {
       return {
         loading: false,
-        producIndex: 1
+        productIndex: 1
       }
     },
 
@@ -34,8 +34,8 @@
     // }),
 
     computed: {
-      ...mapState({
-        products: state => state.products
+      ...mapState({ //           v module name v state name
+        products: state => state.products.all
       }),
 
       ...mapGetters({
@@ -68,15 +68,18 @@
     },
 
     // Will run right after the instance is created
-    async created () {
+    created () {
       this.loading = true
       // dispatch will call store action method
       // The first argument is the name of the action, the second is opitional, which is the payload
       // .then comes from the promise in the action method
-      this.fetchProducts().then((message) => {
-        console.log(message);
-        this.loading = false
-      })
+      // this.fetchProducts().then((message) => {
+      //   console.log(message);
+      //   this.loading = false
+      // })
+
+      this.$store.dispatch('fetchProducts')
+      this.loading = false
     }
   }
 </script>
