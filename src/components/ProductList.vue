@@ -9,8 +9,6 @@
 </template>
 
 <script>
-  import store from '@/store/index'
-
   export default {
     data () {
       return {
@@ -20,7 +18,7 @@
 
     computed: {
       products () {
-        return store.getters.availableProducts
+        return this.$store.getters.availableProducts
         // return store.state.products
       }
     },
@@ -30,7 +28,7 @@
       // dispatch will call store action method
       // The first argument is the name of the action, the second is opitional, which is the payload
       // .then comes from the promise in the action method
-      store.dispatch('fetchProducts').then((message) => {
+      this.$store.dispatch('fetchProducts').then((message) => {
         console.log(message);
         this.loading = false
       })
