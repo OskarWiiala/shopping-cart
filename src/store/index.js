@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: { // state is the data
     products: [],
     // array of {id, quantity}
-    cart: []
+    cart: [],
+    checkoutStatus: null
   },
 
   getters: { // getters are the equivalent of computed properties
@@ -37,7 +38,7 @@ export default new Vuex.Store({
       //   total += product.price * product.quantity
       // })
       // return total
-      
+
       // calculate total price of all items in the cart
       return getters.cartProducts.reduce((total, product) => total + product.price * product.quantity, 0)
     }
@@ -86,6 +87,14 @@ export default new Vuex.Store({
         // decrease item quantity from products
         context.commit('decrementProductInventory', product)
       }
+    },
+
+    checkout ({ state, commit }) {
+      shop.buyProducts(state.cart)
+        .then(() => {
+          commit('emptyCart')
+          commit('setCheckoutStatus', 'success')
+        })
     }
     // addToCart (context, product) {
     //   if(product.inventory > 0) {
@@ -109,7 +118,7 @@ export default new Vuex.Store({
     },
 
     pushProductToCart (state, productId) {
-      state.cart.push({id: productId, quantity: 1})
+      state.cart.push({ id: productId, quantity: 1 })
     },
 
     incrementCartItemQuantity (state, cartItem) {
@@ -121,5 +130,13 @@ export default new Vuex.Store({
       // since product is taken from the products array, the -- calls back to the product
       product.inventory--
     },
+
+    setCheckoutStatus (state, status) {
+      state.checkoutStatus = status
+    },
+
+    emptyCart (state) {
+      state.cart = []
+    }
   }
 })
