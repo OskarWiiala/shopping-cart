@@ -10,8 +10,11 @@ export default new Vuex.Store({
   },
 
   getters: { // getters are the equivalent of computed properties
-    productsCount () {
-      // ...
+    // vuex automatically passes the state as the first parameter
+    // second parameter is the getter
+    availableProducts (state) {
+      // filter available products based on inventory size
+      return state.products.filter(product => product.inventory > 0)
     }
   },
 

@@ -13,7 +13,8 @@
   export default {
     computed: {
       products () {
-        return store.state.products
+        return store.getters.availableProducts
+        // return store.state.products
       }
     },
     // Will run right after the instance is created
