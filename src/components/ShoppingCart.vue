@@ -15,13 +15,21 @@
   import { mapState, mapGetters, mapActions } from 'vuex';
   export default {
     computed: {
-      ...mapGetters({
+      // specify namespace as the first argument for less verbose code
+      ...mapGetters('cart', {
         products: 'cartProducts',
         total: 'cartTotal'
+        // products: 'cart/cartProducts',
+        // total: 'cart/cartTotal'
       }),
 
-      ...mapState({
-        checkoutStatus: state => state.cart.checkoutStatus
+      // getters from other namespaces can also be used (works for states, actions and mutations as well)
+      // ...mapGetters('products', {
+      //   productIsInStock: 'productIsInStock'
+      // }),
+
+      ...mapState('cart', {
+        checkoutStatus: state => state.checkoutStatus
       })
 
       // products () {
@@ -34,11 +42,11 @@
     },
 
     methods: {
-      ...mapActions({
+      ...mapActions('cart', {
         checkout: 'checkout'
       })
       // checkout () {
-      //   console.log('atempting checkout');
+      //   console.log('attempting checkout');
       //   this.$store.dispatch('checkout')
       // }
     }

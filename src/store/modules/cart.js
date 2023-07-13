@@ -1,6 +1,8 @@
 import shop from '@/api/shop'
 // modules just export an object with their state, getters, mutations ...
 export default {
+  namespaced: true,
+
   state: {
     // array of {id, quantity}
     items: [],
@@ -8,7 +10,7 @@ export default {
   },
 
   getters: {
-    cartProducts (state, getters, rootState) {
+    cartProducts (state, getters, rootState, rootGetters) {
       return state.items.map(cartItem => {
         const product = rootState.products.all.find(product => product.id === cartItem.id)
         return {
@@ -32,8 +34,9 @@ export default {
   },
 
   actions: {
-    addProductToCart ({ state, getters, commit, rootState }, product) {
-      if (getters.productIsInStock(product)) {
+    addProductToCart ({ state, getters, commit, rootState, rootGetters }, product) {
+      // specify namespace with ['products/productIsInStock']
+      if (rootGetters['products/productIsInStock'](product)) {
         // checks if product already exists inside cart
         const cartItem = state.items.find(item => item.id === product.id)
         // find cartItem
@@ -45,8 +48,8 @@ export default {
           commit('incrementCartItemQuantity', cartItem)
         }
 
-        // decrease item quantity from products
-        commit('decrementProductInventory', product)
+        // decrease item quantity from products        v for when you need to call a mutation from the global namespace
+        commit('products/decrementProductInventory', product, {root: true})
       }
     },
 

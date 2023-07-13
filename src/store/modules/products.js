@@ -1,6 +1,8 @@
 import shop from "@/api/shop"
 
 export default {
+  namespaced: true,
+
   state: {
     all: []
   },
@@ -36,6 +38,7 @@ export default {
 
     decrementProductInventory (state, product) {
       // since product is taken from the products array, the -- calls back to the product
+      console.log('decrement inv')
       product.inventory--
     }
   },

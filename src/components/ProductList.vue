@@ -34,11 +34,11 @@
     // }),
 
     computed: {
-      ...mapState({ //           v module name v state name
-        products: state => state.products.all
+      ...mapState('products', { //           v module name v state name
+        products: state => state.all
       }),
 
-      ...mapGetters({
+      ...mapGetters('products', {
         productIsInStock: 'productIsInStock'
       })
     },
@@ -58,8 +58,8 @@
 
     methods: {
       ...mapActions({
-        fetchProducts: 'fetchProducts',
-        addProductToCart: 'addProductToCart'
+        fetchProducts: 'products/fetchProducts',
+        addProductToCart: 'cart/addProductToCart'
       }),
 
       // addProductToCart (product) {
@@ -78,8 +78,7 @@
       //   this.loading = false
       // })
 
-      this.$store.dispatch('fetchProducts')
-      this.loading = false
+      this.$store.dispatch('products/fetchProducts').then(() => this.loading = false)
     }
   }
 </script>
